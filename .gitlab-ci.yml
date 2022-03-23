@@ -1,0 +1,19 @@
+stages:
+  - test
+  - build
+  - deploy-tb
+  - deploy
+
+build:
+  stage: build
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  script:
+    - docker build -t betvictor .
+
+deploy:
+  image: bitnami/kubectl:latest
+  stage: deploy
+  script:
+    - kubectl apply -f betvictor.yml -n betvictor
