@@ -1,7 +1,6 @@
 stages:
   - test
   - build
-  - deploy-tb
   - deploy
 
 build:
@@ -13,7 +12,11 @@ build:
     - docker build -t betvictor .
 
 deploy:
-  image: bitnami/kubectl:latest
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   stage: deploy
   script:
-    - kubectl apply -f betvictor.yml -n betvictor
+    - kubectl config get-contexts
+    - kubectl config use-context betvictor/cluster_agents:primary 
+    - kubectl apply -f betvictor.yml -n gitlab-runner
